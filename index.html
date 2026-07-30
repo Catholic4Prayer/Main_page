@@ -319,6 +319,28 @@ footer{
         <iframe id="gameFrame"></iframe>
     </div>
 </div>
+    <div class="modal" id="gameModal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeGame()">X</button>
+        <iframe id="gameFrame"></iframe>
+    </div>
+</div>
+
+<div class="modal" id="subscribeModal">
+    <div class="modal-content subscribe-content">
+        <button class="close-btn" onclick="closeSubscribeModal()">X</button>
+        <h2>Get Updates</h2>
+        <p>Subscribe to receive emails whenever we add new prayers or content to the site!</p>
+        
+        <form action="https://formspree.io/f/xojgzdbk" method="POST">
+            <input type="email" name="email" id="emailInput" placeholder="Enter your email address" required>
+            <button type="submit" class="play-btn">SUBSCRIBE NOW</button>
+        </form>
+        <p style="font-size: 0.8rem; margin-top: 15px; color: #6b7280;">
+            You can unsubscribe at any time by following the link in the footer of any update email you receive.
+        </p>
+    </div>
+</div>
 
 <footer>
     © 2026 CatholicWeb4Prayer
