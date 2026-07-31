@@ -402,6 +402,8 @@ footer{
 <h2 class="section-title">Community Prayer Wall</h2>
 <section class="prayer-section">
     <div class="prayer-container">
+        <p id="statusMsg" style="color: #00e5ff; font-size: 0.85rem; margin-bottom: 10px;"></p>
+        
         <form class="prayer-form" id="prayerForm">
             <input type="text" id="prayerName" placeholder="Your Name or 'Anonymous'" required>
             <textarea id="prayerText" placeholder="Share your prayer intention..." required></textarea>
@@ -486,15 +488,15 @@ search.addEventListener('input', () => {
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCrmEhh4ZUWl4MKB96bFjVu6bEFBuyAEI",
+    authDomain: "catholicweb4prayer.firebaseapp.com",
+    projectId: "catholicweb4prayer",
+    storageBucket: "catholicweb4prayer.firebasestorage.app",
+    messagingSenderId: "36453965935",
+    appId: "1:36453965935:web:e2e8055627f12e8c25793e80"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -502,16 +504,17 @@ search.addEventListener('input', () => {
 
   const prayerForm = document.getElementById('prayerForm');
   const prayerList = document.getElementById('prayerList');
+  const statusMsg = document.getElementById('statusMsg');
 
-  // Generate or retrieve a unique device token to track user-owned posts
   let userToken = localStorage.getItem('prayer_user_token');
   if (!userToken) {
-      userToken = 'user_' + Math.random().toString(36.25) + Date.now().toString(36);
+      userToken = 'user_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
       localStorage.setItem('prayer_user_token', userToken);
   }
 
   async function fetchPrayers() {
       try {
+          statusMsg.textContent = "Loading prayers...";
           const q = query(collection(db, "prayers"));
           const querySnapshot = await getDocs(q);
           
@@ -520,12 +523,16 @@ search.addEventListener('input', () => {
           querySnapshot.forEach((docSnapshot) => {
               const prayer = docSnapshot.data();
               const prayerId = docSnapshot.id;
-              const dateStr = prayer.createdAt ? new Date(prayer.createdAt.toDate()).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+              
+              let dateStr = "";
+              if (prayer.createdAt) {
+                  const dateObj = prayer.createdAt.toDate ? prayer.createdAt.toDate() : new Date(prayer.createdAt);
+                  dateStr = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+              }
               
               const prayerItem = document.createElement('div');
               prayerItem.className = 'prayer-item';
               
-              // Only show the delete button if this device created the post
               let deleteBtnHTML = '';
               if (prayer.ownerToken === userToken) {
                   deleteBtnHTML = `<button class="delete-btn" onclick="window.deletePrayer('${prayerId}')">Delete</button>`;
@@ -533,14 +540,16 @@ search.addEventListener('input', () => {
 
               prayerItem.innerHTML = `
                   ${deleteBtnHTML}
-                  <h4>${escapeHTML(prayer.name)}</h4>
-                  <p>${escapeHTML(prayer.text)}</p>
+                  <h4>${escapeHTML(prayer.name || "Anonymous")}</h4>
+                  <p>${escapeHTML(prayer.text || "")}</p>
                   <span>${dateStr}</span>
               `;
               prayerList.appendChild(prayerItem);
           });
+          statusMsg.textContent = "";
       } catch (error) {
           console.error("Error loading prayers: ", error);
+          statusMsg.textContent = "Error loading prayers. Check console.";
       }
   }
 
@@ -554,32 +563,37 @@ search.addEventListener('input', () => {
       
       if(name && text) {
           try {
+              statusMsg.textContent = "Submitting prayer...";
+              
               await addDoc(collection(db, "prayers"), {
                   name: name,
                   text: text,
-                  ownerToken: userToken, // Save the device identifier to allow deletion
+                  ownerToken: userToken,
                   createdAt: new Date()
               });
 
               nameInput.value = '';
               textInput.value = '';
+              statusMsg.textContent = "Prayer submitted successfully!";
               fetchPrayers();
           } catch (error) {
-              alert("Error submitting prayer. Please try again.");
+              alert("Error submitting prayer. Check console for details.");
               console.error("Error adding document: ", error);
+              statusMsg.textContent = "Submission failed.";
           }
       }
   });
 
-  // Global delete function attached to window so inline onclick works
   window.deletePrayer = async function(prayerId) {
       if (confirm("Are you sure you want to delete this prayer request?")) {
           try {
+              statusMsg.textContent = "Deleting prayer...";
               await deleteDoc(doc(db, "prayers", prayerId));
               fetchPrayers();
           } catch (error) {
               alert("Could not delete the prayer request.");
               console.error("Error deleting document: ", error);
+              statusMsg.textContent = "Deletion failed.";
           }
       }
   };
