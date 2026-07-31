@@ -512,7 +512,7 @@ search.addEventListener('input', () => {
 
   async function fetchPrayers() {
       try {
-          const q = query(collection(db, "prayers"), orderBy("createdAt", "desc"));
+          const q = query(collection(db, "prayers"));
           const querySnapshot = await getDocs(q);
           
           prayerList.innerHTML = ''; 
