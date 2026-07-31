@@ -189,40 +189,51 @@ footer{
     position:relative;
 }
 
-.subscribe-content {
-    width: 100%;
-    max-width: 450px;
+.news-content {
+    width: 90%;
+    max-width: 500px;
     height: auto;
+    max-height: 80vh;
     padding: 40px 30px;
     background: #111827;
     color: white;
-    text-align: center;
+    text-align: left;
     border: 1px solid #1f2937;
     box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+    overflow-y: auto;
+    position: relative;
+    border-radius: 20px;
 }
 
-.subscribe-content h2 {
+.news-content h2 {
     margin-bottom: 15px;
     font-size: 1.8rem;
     color: white;
+    text-align: center;
 }
 
-.subscribe-content p {
+.news-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 15px;
+}
+
+.news-item h4 {
+    color: #00e5ff;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.news-item span {
+    font-size: 0.8rem;
     color: #94a3b8;
-    font-size: 0.95rem;
-    margin-bottom: 25px;
+    display: block;
+    margin-bottom: 8px;
 }
 
-.subscribe-content input[type="email"] {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #374151;
-    border-radius: 12px;
-    background: #1f2937;
-    color: white;
-    font-size: 1rem;
-    outline: none;
-    margin-bottom: 15px;
+.news-item p {
+    color: #cbd5e1;
+    font-size: 0.95rem;
 }
 
 .modal iframe{
@@ -261,7 +272,7 @@ footer{
         <p>Welcome To...</p>
         <h2>CatholicWeb4Prayer</h2>
         <button onclick="scrollToGames()">START BROWSING</button>
-        <button onclick="openSubscribeModal()" class="outline-btn">GET UPDATES</button>
+        <button onclick="openNewsModal()" class="outline-btn">WHAT'S NEW</button>
     </div>
 </section>
 
@@ -289,21 +300,28 @@ footer{
     </div>
 </div>
 
-<div class="modal" id="subscribeModal">
-    <div class="modal-content subscribe-content">
-        <h2>Get Updates</h2>
-        <p>Subscribe to receive emails whenever new prayers or content are added to the site!</p>
+<div class="modal" id="newsModal">
+    <div class="news-content">
+        <button class="close-btn" onclick="closeNewsModal()">X</button>
+        <h2>What's New</h2>
         
-       
-<form action="https://api.web3forms.com/submit" method="POST">
-  <input type="hidden" name="access_key" value="053a5b92-5a29-4e36-a4a7-fc4ac473e0c0">
-  <input type="email" name="email" required>
- <button class="close-btn" onclick="closeSubscribeModal()">X</button>
-</form>
+        <div class="news-item">
+            <h4>The Angelus Prayer Added</h4>
+            <span>July 2026</span>
+            <p>Explore our newest addition—a dedicated page to help you pray and reflect upon The Angelus scriptural prayer.</p>
+        </div>
 
-        <p style="font-size: 0.8rem; margin-top: 15px; color: #6b7280;">
-            You can unsubscribe at any time by following the link in the footer of any update email you receive.
-        </p>
+        <div class="news-item">
+            <h4>Saint Martin de Porres Profile</h4>
+            <span>June 2026</span>
+            <p>Read all about the inspiring life, charity, and legacy of Saint Martin de Porres in our updated reading section.</p>
+        </div>
+
+        <div class="news-item">
+            <h4>Site Launch</h4>
+            <span>May 2026</span>
+            <p>Welcome to CatholicWeb4Prayer! Our platform is officially live to help bring interactive prayer resources to everyone.</p>
+        </div>
     </div>
 </div>
 
@@ -328,12 +346,12 @@ function closeGame(){
     document.getElementById('gameFrame').src='';
 }
 
-function openSubscribeModal(){
-    document.getElementById('subscribeModal').style.display='flex';
+function openNewsModal(){
+    document.getElementById('newsModal').style.display='flex';
 }
 
-function closeSubscribeModal(){
-    document.getElementById('subscribeModal').style.display='none';
+function closeNewsModal(){
+    document.getElementById('newsModal').style.display='none';
 }
 
 const search = document.getElementById('search');
