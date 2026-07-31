@@ -291,15 +291,16 @@ footer{
 
 <div class="modal" id="subscribeModal">
     <div class="modal-content subscribe-content">
-        <button class="close-btn" onclick="closeSubscribeModal()">X</button>
         <h2>Get Updates</h2>
         <p>Subscribe to receive emails whenever new prayers or content are added to the site!</p>
         
-        <form action="https://formsubmit.co/gerald.m.wlaschin@gmail.com" method="POST">
-     <input type="text" name="name" required>
-     <input type="email" name="email" required>
-     <button type="submit">Subscribe Now</button>
+       
+<form action="https://api.web3forms.com/submit" method="POST">
+  <input type="hidden" name="access_key" value="053a5b92-5a29-4e36-a4a7-fc4ac473e0c0">
+  <input type="email" name="email" required>
+ <button class="close-btn" onclick="closeSubscribeModal()">X</button>
 </form>
+
         <p style="font-size: 0.8rem; margin-top: 15px; color: #6b7280;">
             You can unsubscribe at any time by following the link in the footer of any update email you receive.
         </p>
